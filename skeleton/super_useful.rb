@@ -1,3 +1,9 @@
+class CoffeeRelatedError < StandardError
+end
+
+class WrongFruitError < StandardError 
+end
+
 # PHASE 2
 def convert_to_int(str)
   Integer(str)
@@ -7,19 +13,27 @@ end
 FRUITS = ["apple", "banana", "orange"]
 
 def reaction(maybe_fruit)
+  
   if FRUITS.include? maybe_fruit
     puts "OMG, thanks so much for the #{maybe_fruit}!"
-  else 
-    raise StandardError 
+  else
+    raise WrongFruitError.new('wrong fruit was passed') if itsafruit == false 
   end 
 end
 
 def feed_me_a_fruit
   puts "Hello, I am a friendly monster. :)"
-
-  puts "Feed me a fruit! (Enter the name of a fruit:)"
-  maybe_fruit = gets.chomp
-  reaction(maybe_fruit) 
+  begin
+    puts "Feed me a fruit! (Enter the name of a fruit:)"
+    maybe_fruit = gets.chomp
+    reaction(maybe_fruit) 
+  rescue
+    puts 'you gave me the wrong fruit. give me coffee. try again'
+    input = gets.chomp 
+    raise CoffeeRelatedError.new('sorry my dude - you dont try again.') if input != 'coffee'
+    retry
+  end
+  
 end  
 
 # PHASE 4
@@ -44,3 +58,4 @@ class BestFriend
 end
 
 
+feed_me_a_fruit
